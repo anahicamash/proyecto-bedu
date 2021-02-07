@@ -1,26 +1,3 @@
-//HTML GUIA
-
-/* <div id="contenido">
-        <div class="container">
-
-            <h1>Local Storage</h1>
-            <div class="row">
-                <div class="six columns">
-                    <label for="tweet">Tweet:</label>
-                    <form action="#" id="formulario">
-                            <label for="tweet"></label>
-                            <textarea id="tweet" class="u-full-width"></textarea>
-                            <input type="submit" class="button u-full-width button-primary" value="Agregar">
-                    </form>
-                </div>
-                <div class="six columns">
-                    <h2>Mis Tweets</h2>
-                    <div id="lista-tweets"></div>
-                </div>
-            </div>
-
-        </div>
-    </div> <!--#contenido--> */
 
 
     function createNode(type) {
