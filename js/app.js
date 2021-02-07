@@ -93,20 +93,25 @@ function agregarTweet(e) {
     e.preventDefault();
     //leer el valor del text area
     const tweet = document.getElementById('tweet').value;
-    //crear boton de eliminar
-    const botonBorrar = document.createElement('a');
-    botonBorrar.classList = 'borrar-tweet';
-    botonBorrar.innerText = 'x';
-    //crear un elemento y añadir el elemento a la lsita
-    const li = document.createElement('li');
-    li.innerText = tweet;
-    //añade el boton de borrar al tweet
-    li.appendChild(botonBorrar);
-    //añade el tweet a la lista
-    listaTweets.appendChild(li);
+    if (tweet != ""){
+        //crear boton de eliminar
+        const botonBorrar = document.createElement('a');
+        botonBorrar.classList = 'borrar-tweet';
+        botonBorrar.innerText = 'x';
+        //crear un elemento y añadir el elemento a la lsita
+        const li = document.createElement('li');
+        li.innerText = tweet;
+        //añade el boton de borrar al tweet
+        li.appendChild(botonBorrar);
+        //añade el tweet a la lista
+        listaTweets.appendChild(li);
 
-    //agregar a local
-    agregarTweetLocalStorage(tweet);
+        //agregar a local
+        agregarTweetLocalStorage(tweet);
+        document.getElementById('tweet').value = "";
+    } else {
+        alert("Please, add a task");
+    }
 }
 //elimina el tweet del DOM
 function borrarTweet(e) {
