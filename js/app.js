@@ -4,8 +4,7 @@
         var node = document.createElement(type);
         return node;
     }
-    var contenido = createNode('div');
-    contenido.id = "contenido";
+    var contenido = document.getElementById('app');
 
     var container = createNode('div');
     container.className = "container";
