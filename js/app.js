@@ -1,9 +1,11 @@
 
 
-    function createNode(type) {
+   // Función que crea los nodos 
+   function createNode(type) {
         var node = document.createElement(type);
         return node;
     }
+    // Crear y agregar nodos 
     var app = document.getElementById('app');
 
     var container = createNode('div');
@@ -29,7 +31,6 @@
     sixcolumns.appendChild(task);
     task.appendChild(text);
     
-
     var form = createNode('form');
     form.id = "form";
     form.action = "#";
@@ -61,9 +62,7 @@
 
     var ul =  createNode('ul');
     list.appendChild(ul);
-
-
-
+    
     document.body.appendChild(app);
     console.log(app)
     
@@ -143,7 +142,7 @@ function localStorageListo() {
         deleteButton.innerText = 'x';
         //crear un elemento y añadir el elemento a la lsita
         var ul =  document.querySelector('ul');
-        const li = document.createElement('li');
+        var li = document.createElement('li');
         li.innerText = task;
         //añade el boton de borrar al tweet
         li.appendChild(deleteTask);
