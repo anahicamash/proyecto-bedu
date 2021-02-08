@@ -4,12 +4,11 @@
         var node = document.createElement(type);
         return node;
     }
-    var contenido = createNode('div');
-    contenido.id = "contenido";
+    var app = document.getElementById('app');
 
     var container = createNode('div');
     container.className = "container";
-    contenido.appendChild(container);
+    app.appendChild(container);
 
     var h1 =  createNode('h1');
     var text = document.createTextNode("Todo APP");
@@ -24,27 +23,27 @@
     sixcolumns.className = "six columns";
     row.appendChild(sixcolumns);
 
-    var tweet = createNode('label');
-    var text = document.createTextNode("Tweet:");
-    tweet.className = "tweet";
-    sixcolumns.appendChild(tweet);
-    tweet.appendChild(text);
+    var task = createNode('label');
+    var text = document.createTextNode("Task:");
+    task.className = "task";
+    sixcolumns.appendChild(task);
+    task.appendChild(text);
     
 
     var form = createNode('form');
-    form.id = "formulario";
+    form.id = "form";
     form.action = "#";
     sixcolumns.appendChild(form);
 
     var textarea = createNode('textarea');
     textarea.className = "u-full-width";
-    textarea.id = "tweet";
+    textarea.id = "task";
     form.appendChild(textarea);
 
     var input = createNode('input');
     input.className = "button u-full-width button-primary";
     input.type = "submit"
-    input.value = "Agregar"
+    input.value = "Add"
     form.appendChild(input);
 
     var sixcolumns2 = createNode('div');
@@ -52,17 +51,21 @@
     row.appendChild(sixcolumns2);
 
     var h2 =  createNode('h2');
-    var text = document.createTextNode("Mis tweets");
+    var text = document.createTextNode("My tasks");
     sixcolumns2.appendChild(h2);
     h2.appendChild(text);
 
-    var lista =  createNode('div');
-    lista.id = "lista-tweets";
-    sixcolumns2.appendChild(lista);
+    var list =  createNode('div');
+    list.id = "task-list";
+    sixcolumns2.appendChild(list);
+
+    var ul =  createNode('ul');
+    list.appendChild(ul);
 
 
-    document.body.appendChild(contenido);
-    console.log(contenido)
+
+    document.body.appendChild(app);
+    console.log(app)
     
 
 
@@ -70,16 +73,16 @@
 
 
 //las variables
-const listaTweets = document.getElementById('lista-tweets');
+const taskList = document.getElementById('task-list');
 
 ///los event listeners
 eventListeners();
 
 function eventListeners() {
     //cuando se envia el formuladio
-    document.querySelector('#formulario').addEventListener('submit', agregarTweet);
+    document.querySelector('#form').addEventListener('submit', addTask);
     //borrar tweets
-    listaTweets.addEventListener('click', borrarTweet);
+    taskList.addEventListener('click', deleteTask);
     //contenido cargado
     document.addEventListener('DOMContentLoaded', localStorageListo);
 
@@ -89,31 +92,40 @@ function eventListeners() {
 
 //añadir tweet del formulario
 
-function agregarTweet(e) {
+function addTask(e) {
     e.preventDefault();
     //leer el valor del text area
-    const tweet = document.getElementById('tweet').value;
-    //crear boton de eliminar
-    const botonBorrar = document.createElement('a');
-    botonBorrar.classList = 'borrar-tweet';
-    botonBorrar.innerText = 'x';
-    //crear un elemento y añadir el elemento a la lsita
-    const li = document.createElement('li');
-    li.innerText = tweet;
-    //añade el boton de borrar al tweet
-    li.appendChild(botonBorrar);
-    //añade el tweet a la lista
-    listaTweets.appendChild(li);
+    var task = document.getElementById('task').value;
+    if (task != ""){
+        //crear boton de eliminar
+        var deleteButton = document.createElement('a');
+        deleteButton.classList = 'delete-task';
+        deleteButton.innerText = 'x';
+        //crear un elemento y añadir el elemento a la lsita
+        var ul =  document.querySelector('ul');
+        var li = document.createElement('li');
+        li.innerText = task;
+        //añade el boton de borrar al tweet
+        li.appendChild(deleteButton);
+        //añade el tweet a la lista
+        taskList.appendChild(ul);
+        ul.appendChild(li);
 
-    //agregar a local
-    agregarTweetLocalStorage(tweet);
+        //agregar a local
+        addTaskLocalStorage(task);
+        document.getElementById('task').value = "";
+    } else {
+        alert("Please, add a task");
+    }
+
+
 }
 //elimina el tweet del DOM
-function borrarTweet(e) {
+function deleteTask(e) {
     e.preventDefault();
-    if (e.target.className === 'borrar-tweet') {
+    if (e.target.className === 'delete-task') {
         e.target.parentElement.remove();
-        borrarTweetLocalStorage(e.target.parentElement.textContent);
+        deleteTaskLocalStorage(e.target.parentElement.textContent);
 
         //alert('Tweet eliminado')
     }
@@ -122,61 +134,72 @@ function borrarTweet(e) {
 
 //mostrar datos de localStorage en la lista
 function localStorageListo() {
-    let tweets;
-    tweets = obtenerTweetsLocalStorage();
-    tweets.forEach(function(tweet) {
+    var tasks;
+    tasks = getTaskLocalStorage();
+    tasks.forEach(function(task) {
 
-        const botonBorrar = document.createElement('a');
-        botonBorrar.classList = 'borrar-tweet';
-        botonBorrar.innerText = 'x';
+        var deleteButton = document.createElement('a');
+        deleteButton.classList = 'delete-task';
+        deleteButton.innerText = 'x';
         //crear un elemento y añadir el elemento a la lsita
+        var ul =  document.querySelector('ul');
         const li = document.createElement('li');
-        li.innerText = tweet;
+        li.innerText = task;
         //añade el boton de borrar al tweet
-        li.appendChild(botonBorrar);
+        li.appendChild(deleteTask);
         //añade el tweet a la lista
-        listaTweets.appendChild(li);
+        taskList.appendChild(ul);
+        ul.appendChild(li);
 
     })
 }
 
 // agrega a el local storage
-function agregarTweetLocalStorage(tweet) {
-    let tweets;
-    tweets = obtenerTweetsLocalStorage();
+function addTaskLocalStorage(task) {
+    var tasks;
+    tasks = getTaskLocalStorage();
     // Añadir el nuevo tweet que es un areglo
-    tweets.push(tweet);
+    tasks.push(task);
     // Convertir de string a arreglo para local storage
-    localStorage.setItem('tweets', JSON.stringify(tweets));
+    localStorage.setItem('task', JSON.stringify(tasks));
 }
 
 // se encarga de comprovar qeu se tengan elementos en localStorage
 // y retorna un areglo
-function obtenerTweetsLocalStorage() {
-    let tweets;
+function getTaskLocalStorage() {
+    var tasks;
     // Revisamos los valoes de local storage
-    if (localStorage.getItem('tweets') === null) {
-        tweets = [];
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
     } else {
-        tweets = JSON.parse(localStorage.getItem('tweets'));
+        tasks = JSON.parse(localStorage.getItem('tasks'));
     }
-    return tweets;
+    return tasks;
 }
 
 //eliminar tweet de local storage
 
-function borrarTweetLocalStorage(tweet) {
-    let tweets, tweetsBorrar;
+function deleteTaskLocalStorage(task) {
+    var tasks, deleteTask;
     //parte que se encarga de seleccionar todo a partir de
     //un areglo y posterior mente elimina el ultimo caracter
     // en este caso la x
-    tweetsBorrar = tweet.substring(0, tweet.length - 1);
-    tweets = obtenerTweetsLocalStorage();
-    tweets.forEach(function(tweet, index) {
-        if (tweetsBorrar === tweet) {
-            tweets.splice(index, 1);
+    deleteTask = tasks.substring(0, tasks.length - 1);
+    tasks = getTaskLocalStorage();
+    tasks.forEach(function(task, index) {
+        if (deleteTask === tasks) {
+            tasks.splice(index, 1);
         }
     });
     //esto lo vuelve un string
-    localStorage.setItem('tweets', JSON.stringify(tweets))
+    localStorage.setItem('tasks', JSON.stringify(tasks))
 }
+var ulList = document.querySelector('ul');
+ulList.addEventListener('click',function(event){
+
+    if(event.target.tagName === "LI"){
+
+        event.target.classList.toggle('checked');
+
+    }
+},false);
